@@ -1,0 +1,146 @@
+/* Import Roboto for that authentic Material UI feel */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+
+:root {
+    --primary: #1976d2; /* MUI Primary Blue */
+    --primary-dark: #115293;
+    --bg-color: #f5f5f5; /* Standard MUI background */
+    --surface: #ffffff;
+    --text-main: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --divider: rgba(0, 0, 0, 0.12);
+    --shadow: 0px 3px 3px -2px rgba(0,0,0,0.2), 
+               0px 3px 4px 0px rgba(0,0,0,0.14), 
+               0px 1px 8px 0px rgba(0,0,0,0.12);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* The Main "Paper" Card */
+.entry-content {
+    background: var(--surface);
+    max-width: 900px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    box-sizing: border-box;
+}
+
+h1 {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 2.1rem;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--divider);
+    padding-bottom: 10px;
+}
+
+h2, .cpp-section {
+    color: var(--primary-dark);
+    font-weight: 500;
+    margin-top: 32px;
+    font-size: 1.5rem;
+}
+
+/* Code Blocks */
+pre {
+    background: #272822; /* Monokai-ish Dark */
+    color: #f8f8f2;
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+code {
+    font-family: 'Roboto Mono', monospace;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #d32f2f; /* MUI Error/Accent Red for inline code */
+}
+
+/* LearnCPP Specific Note Boxes */
+.cpp-note {
+    margin: 24px 0;
+    padding: 16px 24px;
+    border-left: 5px solid var(--primary);
+    border-radius: 4px;
+    background: #f0f7ff;
+}
+
+.cpp-lightgraybackground { background: #fafafa; border-left-color: #9e9e9e; }
+.cpp-lightpurplebackground { background: #f3e5f5; border-left-color: #9c27b0; }
+.cpp-lightbluebackground { background: #e3f2fd; border-left-color: #2196f3; }
+
+/* Solutions and Hints */
+.wpsolution, .wphint {
+    display: none; /* Controlled by JS */
+    background: #f1f8e9;
+    border: 1px solid #c5e1a5;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 4px;
+    color: #33691e;
+}
+
+.solution_link_show, .hint_link_show {
+    display: inline-block;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.solution_link_show:hover { background: rgba(25, 118, 210, 0.04); }
+
+/* Navigation Buttons at bottom */
+.local-lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--divider);
+}
+
+.local-lesson-nav a {
+    color: white;
+    background: var(--primary);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.local-lesson-nav a:hover {
+    background: var(--primary-dark);
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14);
+}
+
+/* Hide lingering ad placeholders */
+[id^="ezoic-pub-ad-placeholder"], .cf_monitor, [id^="ezwrap"] {
+    display: none !important;
+}
