@@ -54,5 +54,9 @@ sudo pacman -Sy python-requests python-beautifulsoup4
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/yourusername/learncpp-scraper.git](https://github.com/yourusername/learncpp-scraper.git)
+   git clone [https://github.com/BjornTheThunder/learncpp-web-scrapper](https://github.com/BjornTheThunder/learncpp-web-scrapper)
    cd learncpp-scraper
+2. Execute the program:
+```bash
+   python main.py
+```
