@@ -37,7 +37,7 @@ In alignment with the requirements specified by the site owner:
 
 #### On Windows open PowerShell and execute:
 ```shell
-pip install pip beautifulsoup4
+pip install requests beautifulsoup4
 ```
 
 #### On Linux execute:
