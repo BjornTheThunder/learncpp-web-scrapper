@@ -7,7 +7,7 @@ from urllib.parse import urljoin, urlparse, urlunparse, quote_plus
 # --- Configuration ---
 START_URL = "https://www.learncpp.com/cpp-tutorial/introduction-to-these-tutorials/"
 BASE_URL = "https://www.learncpp.com"
-MAX_LESSONS = 50
+MAX_LESSONS = 5
 STOP_TITLE = "C.1 — The end?"
 OUTPUT_FOLDER = "content"
 IMG_FOLDER = os.path.join(OUTPUT_FOLDER, "img")
@@ -111,18 +111,9 @@ def scrape_lesson(url):
         print(f"Error scraping {url}: {e}")
         return None, None
 
-
 def wrap_and_nav(lesson, idx, total):
-    prev_link = (
-        f'<a href="lesson_{idx - 1}.html">← Previous</a>'
-        if idx > 0
-        else "<span></span>"
-    )
-    next_link = (
-        f'<a href="lesson_{idx + 1}.html">Next →</a>'
-        if idx < total - 1
-        else "<span></span>"
-    )
+    prev_link = f'<a href="lesson_{idx - 1}.html">← Previous</a>' if idx > 0 else "<span></span>"
+    next_link = f'<a href="lesson_{idx + 1}.html">Next →</a>' if idx < total - 1 else "<span></span>"
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -130,17 +121,34 @@ def wrap_and_nav(lesson, idx, total):
     <meta charset="UTF-8">
     <title>{lesson["title"]}</title>
     <link rel="stylesheet" href="{CSS_FILENAME}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <script>
-    function cppSolutionToggle(e,l,s,h){{e.style.display=(e.style.display==='none'||e.style.display==='')?'block':'none';l.innerHTML=(e.style.display==='none')?s:h;}}
-    function cppHintToggle(e,l,s,h){{cppSolutionToggle(e,l,s,h);}}
+        (function() {{
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }})();
+
+        function toggleTheme() {{
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('theme', target);
+        }}
+
+        function cppSolutionToggle(e,l,s,h){{e.style.display=(e.style.display==='none'||e.style.display==='')?'block':'none';l.innerHTML=(e.style.display==='none')?s:h;}}
+        function cppHintToggle(e,l,s,h){{cppSolutionToggle(e,l,s,h);}}
     </script>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓</button>
     <div class="entry-content">
         <h1>{lesson["title"]}</h1>
         {lesson["body"]}
         <div class="local-lesson-nav">{prev_link}<a href="index.html">📚 Index</a>{next_link}</div>
     </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>
 </html>"""
 
@@ -181,12 +189,20 @@ def run_scraper():
         for a_tag in soup.find_all("a", href=True):
             href = a_tag["href"]
 
+            #Adding Prism.js functionality
+            for pre in soup.find_all("pre"):
+                code_content = pre.get_text()
+                pre.string = "" # Clear pre
+                new_code_tag = soup.new_tag("code", attrs={"class": "language-cpp"})
+                new_code_tag.string = code_content
+                pre.append(new_code_tag)
+
             # Check if it's an internal LearnCPP link (or a relative link)
             if BASE_URL in href or href.startswith("/"):
                 clean_target, fragment = normalize_url(href)
 
                 if clean_target in url_to_local_map:
-                    # ✅ Route to local file
+                    # Route to local file
                     new_href = url_to_local_map[clean_target]
                     if (
                         fragment
@@ -194,7 +210,7 @@ def run_scraper():
                         new_href += f"#{fragment}"
                     a_tag["href"] = new_href
                 else:
-                    # 🔍 Route to Google Search
+                    # Route to Google Search
                     link_text = a_tag.get_text(strip=True)
                     if not link_text:
                         link_text = "C++"
@@ -214,15 +230,30 @@ def run_scraper():
 
     # --- PHASE 3: Generate Index ---
     with open(os.path.join(OUTPUT_FOLDER, "index.html"), "w", encoding="utf-8") as f:
-        list_items = "".join(
-            [
-                f'<li><a href="{l["filename"]}">{l["title"]}</a></li>'
-                for l in all_lessons
-            ]
-        )
-        f.write(
-            f'<html><head><link rel="stylesheet" href="{CSS_FILENAME}"></head><body><div class="entry-content"><h1>Index</h1><ul>{list_items}</ul></div></body></html>'
-        )
+        list_items = "".join([f'<li><a href="{l["filename"]}">{l["title"]}</a></li>' for l in all_lessons])
+        f.write(f"""
+        <html>
+        <head>
+            <link rel="stylesheet" href="{CSS_FILENAME}">
+            <meta charset="UTF-8">
+            <script>
+                (function() {{
+                    const savedTheme = localStorage.getItem('theme') || 'light';
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                }})();
+                function toggleTheme() {{
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const target = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', target);
+                    localStorage.setItem('theme', target);
+                }}
+            </script>
+        </head>
+        <body>
+            <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+            <div class="entry-content"><h1>Index</h1><ul>{list_items}</ul></div>
+        </body>
+        </html>""")
 
     print("✅ Done! Links are fully localized.")
 

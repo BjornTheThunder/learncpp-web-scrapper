@@ -1,146 +1,262 @@
-/* Import Roboto for that authentic Material UI feel */
+/* Import Roboto */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap');
 
 :root {
-    --primary: #1976d2; /* MUI Primary Blue */
-    --primary-dark: #115293;
-    --bg-color: #f5f5f5; /* Standard MUI background */
+    /* Light Mode Palette */
+    --primary: #1976d2;
+    --primary-dark: #1565c0;
+    --bg-color: #f8f9fa;
     --surface: #ffffff;
-    --text-main: rgba(0, 0, 0, 0.87);
-    --text-secondary: rgba(0, 0, 0, 0.6);
-    --divider: rgba(0, 0, 0, 0.12);
-    --shadow: 0px 3px 3px -2px rgba(0,0,0,0.2), 
-               0px 3px 4px 0px rgba(0,0,0,0.14), 
-               0px 1px 8px 0px rgba(0,0,0,0.12);
+    --text-main: #1a1a1b;
+    --text-secondary: #5f6368;
+    --divider: #e0e0e0;
+    --code-inline-bg: #f1f3f4;
+    --code-inline-text: #d32f2f;
+    --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    
+    /* Box Colors - Light Mode (High Contrast) */
+    --note-bg: #e8f0fe;
+    --note-border: #1976d2;
+    --note-gray-bg: #f5f5f5;
+    --note-purple-bg: #f3e5f5;
+    --note-blue-bg: #e3f2fd;
+    --solution-bg: #e8f5e9;
+    --solution-border: #4caf50;
+    --solution-text: #1b5e20;
+    
+    --btn-text: #ffffff;
+}
+
+/* Automatic Dark Mode Support & Manual Override */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary: #90caf9;
+        --primary-dark: #64b5f6;
+        --bg-color: #121212;
+        --surface: #1e1e1e;
+        --text-main: #e8eaed;
+        --text-secondary: #9aa0a6;
+        --divider: #3c4043;
+        --code-inline-bg: #2d2d2d;
+        --code-inline-text: #ff8a80;
+        
+        /* Box Colors - Dark Mode (Better Legibility) */
+        --note-bg: rgba(25, 118, 210, 0.15);
+        --note-border: #90caf9;
+        --note-gray-bg: #2d2d2d;
+        --note-purple-bg: rgba(156, 39, 176, 0.15);
+        --note-blue-bg: rgba(3, 169, 244, 0.15);
+        --solution-bg: rgba(76, 175, 80, 0.1);
+        --solution-border: #81c784;
+        --solution-text: #c8e6c9;
+        
+        --btn-text: #121212;
+    }
+}
+
+/* Manual Theme Toggle Class */
+[data-theme="dark"] {
+    --primary: #90caf9;
+    --primary-dark: #64b5f6;
+    --bg-color: #121212;
+    --surface: #1e1e1e;
+    --text-main: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --divider: #3c4043;
+    --code-inline-bg: #2d2d2d;
+    --code-inline-text: #ff8a80;
+    --note-bg: rgba(25, 118, 210, 0.15);
+    --note-border: #90caf9;
+    --solution-bg: rgba(76, 175, 80, 0.1);
+    --solution-border: #81c784;
+    --solution-text: #c8e6c9;
+    --btn-text: #121212;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7; /* Increased for better readability */
     margin: 0;
-    padding: 20px 10px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* The Main "Paper" Card */
 .entry-content {
     background: var(--surface);
-    max-width: 900px;
+    max-width: 850px; /* Slightly narrower for optimal line length */
     width: 100%;
-    padding: 40px;
-    border-radius: 8px;
+    padding: 2rem;
+    border-radius: 12px;
     box-shadow: var(--shadow);
     box-sizing: border-box;
 }
 
-h1 {
+h1, h2, h3 {
     color: var(--primary);
-    font-weight: 500;
-    font-size: 2.1rem;
-    margin-bottom: 24px;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
     border-bottom: 2px solid var(--divider);
-    padding-bottom: 10px;
+    padding-bottom: 16px;
+    margin-bottom: 32px;
 }
 
-h2, .cpp-section {
-    color: var(--primary-dark);
-    font-weight: 500;
-    margin-top: 32px;
+h2 {
     font-size: 1.5rem;
+    margin-top: 2.5rem;
 }
 
-/* Code Blocks */
+/* --- Code Styling --- */
 pre {
-    background: #272822; /* Monokai-ish Dark */
-    color: #f8f8f2;
-    padding: 16px;
-    border-radius: 4px;
+    background: #0d1117; /* GitHub-style dark for code */
+    color: #e6edf3;
+    padding: 20px;
+    border-radius: 8px;
     overflow-x: auto;
     font-family: 'Roboto Mono', monospace;
-    font-size: 0.9rem;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    font-size: 0.95rem;
+    border: 1px solid var(--divider);
+    line-height: 1.5;
 }
 
 code {
     font-family: 'Roboto Mono', monospace;
-    background: rgba(0, 0, 0, 0.05);
-    padding: 2px 6px;
+    background: var(--code-inline-bg);
+    padding: 0.2em 0.4em;
     border-radius: 4px;
-    color: #d32f2f; /* MUI Error/Accent Red for inline code */
+    color: var(--code-inline-text);
+    font-size: 0.9em;
 }
 
-/* LearnCPP Specific Note Boxes */
+/* --- Enhanced Callout Boxes --- */
 .cpp-note {
-    margin: 24px 0;
-    padding: 16px 24px;
-    border-left: 5px solid var(--primary);
-    border-radius: 4px;
-    background: #f0f7ff;
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 4px solid var(--note-border);
+    border-radius: 0 8px 8px 0;
+    background: var(--note-bg);
 }
 
-.cpp-lightgraybackground { background: #fafafa; border-left-color: #9e9e9e; }
-.cpp-lightpurplebackground { background: #f3e5f5; border-left-color: #9c27b0; }
-.cpp-lightbluebackground { background: #e3f2fd; border-left-color: #2196f3; }
+.cpp-lightgraybackground { background: var(--note-gray-bg); border-left-color: #757575; }
+.cpp-lightpurplebackground { background: var(--note-purple-bg); border-left-color: #9c27b0; }
+.cpp-lightbluebackground { background: var(--note-blue-bg); border-left-color: #03a9f4; }
 
-/* Solutions and Hints */
 .wpsolution, .wphint {
-    display: none; /* Controlled by JS */
-    background: #f1f8e9;
-    border: 1px solid #c5e1a5;
-    padding: 15px;
-    margin-top: 10px;
-    border-radius: 4px;
-    color: #33691e;
+    background: var(--solution-bg);
+    border: 1px solid var(--solution-border);
+    padding: 1.25rem;
+    margin-top: 1rem;
+    border-radius: 8px;
+    color: var(--solution-text);
 }
 
-.solution_link_show, .hint_link_show {
-    display: inline-block;
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 500;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    padding: 8px 16px;
-    border: 1px solid var(--primary);
-    border-radius: 4px;
-    transition: background 0.2s;
-}
-
-.solution_link_show:hover { background: rgba(25, 118, 210, 0.04); }
-
-/* Navigation Buttons at bottom */
+/* --- Navigation & Spacing --- */
 .local-lesson-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes buttons to opposite sides */
     align-items: center;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid var(--divider);
+    gap: 1rem;                      /* Spacing between buttons if they wrap */
+    margin: 3rem 0;                 /* Vertical spacing from content */
+    flex-wrap: wrap;                /* Allows buttons to stack on mobile */
+    width: 100%;
 }
 
-.local-lesson-nav a {
-    color: white;
+.local-lesson-nav a, .solution_link_show {
+    display: inline-block;          /* Ensures padding and height are respected */
     background: var(--primary);
+    color: var(--btn-text) !important;
     text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 12px 24px;
+    border-radius: 6px;
     font-weight: 500;
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14);
-    transition: background 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.5px;
+    transition: transform 0.1s, filter 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;            /* Prevents text from breaking inside button */
+}
+
+/* Mobile Tweak: Center buttons when they stack */
+@media (max-width: 600px) {
+    .local-lesson-nav {
+        justify-content: center;
+    }
+    
+    .local-lesson-nav a {
+        flex: 1 1 auto;             /* Buttons grow to fill width on mobile */
+        text-align: center;
+    }
 }
 
 .local-lesson-nav a:hover {
-    background: var(--primary-dark);
-    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14);
+    filter: brightness(1.1);
+    transform: translateY(-1px);
 }
 
-/* Hide lingering ad placeholders */
-[id^="ezoic-pub-ad-placeholder"], .cf_monitor, [id^="ezwrap"] {
-    display: none !important;
+.theme-toggle {
+    position: fixed;
+    bottom: 30px; /* Moved to bottom-right for better thumb reach on mobile */
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background: var(--primary);
+    color: var(--btn-text);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    font-size: 24px;
+}
+
+/* --- Code Styling & C++ Highlighting --- */
+pre {
+    background: #0d1117; /* GitHub-style dark */
+    color: #e6edf3;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.95rem;
+    border: 1px solid var(--divider);
+    line-height: 1.6;
+    tab-size: 4;
+}
+
+/* Syntax Highlighting Tokens */
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: #8b949e; font-style: italic; }
+.token.punctuation { color: #89ddff; }
+.token.namespace { opacity: .7; }
+
+/* C++ Keywords & Control Flow */
+.token.keyword, .token.directive.keyword { color: #ff7b72; font-weight: 500; }
+.token.operator, .token.entity, .token.url { color: #79c0ff; }
+
+/* Classes, Types and Functions */
+.token.class-name, .token.type { color: #ffa657; }
+.token.function { color: #d2a8ff; }
+.token.boolean, .token.number { color: #79c0ff; }
+
+/* Strings and Regex */
+.token.string, .token.char { color: #a5d6ff; }
+.token.property, .token.tag, .token.constant, .token.symbol, .token.deleted { color: #79c0ff; }
+
+/* C++ Preprocessor */
+.token.directive { color: #ff7b72; }
+.token.macro.name { color: #d2a8ff; }
+
+/* Inline Code remains distinct */
+code:not(pre code) {
+    font-family: 'Roboto Mono', monospace;
+    background: var(--code-inline-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    color: var(--code-inline-text);
+    font-size: 0.9em;
 }
