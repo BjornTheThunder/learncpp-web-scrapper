@@ -25,6 +25,9 @@
     --solution-text: #1b5e20;
     
     --btn-text: #ffffff;
+
+    --link-color: #1a73e8;
+    --link-hover: #1557b0;
 }
 
 /* Automatic Dark Mode Support & Manual Override */
@@ -40,7 +43,6 @@
         --code-inline-bg: #2d2d2d;
         --code-inline-text: #ff8a80;
         
-        /* Box Colors - Dark Mode (Better Legibility) */
         --note-bg: rgba(25, 118, 210, 0.15);
         --note-border: #90caf9;
         --note-gray-bg: #2d2d2d;
@@ -71,13 +73,15 @@
     --solution-border: #81c784;
     --solution-text: #c8e6c9;
     --btn-text: #121212;
+    --link-color: #8ab4f8;
+    --link-hover: #aecbfa;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-    line-height: 1.7; /* Increased for better readability */
+    line-height: 1.7;
     margin: 0;
     padding: 20px;
     display: flex;
@@ -88,7 +92,7 @@ body {
 
 .entry-content {
     background: var(--surface);
-    max-width: 850px; /* Slightly narrower for optimal line length */
+    max-width: 850px;
     width: 100%;
     padding: 2rem;
     border-radius: 12px;
@@ -115,7 +119,7 @@ h2 {
 
 /* --- Code Styling --- */
 pre {
-    background: #0d1117; /* GitHub-style dark for code */
+    background: #0d1117;
     color: #e6edf3;
     padding: 20px;
     border-radius: 8px;
@@ -160,16 +164,16 @@ code {
 /* --- Navigation & Spacing --- */
 .local-lesson-nav {
     display: flex;
-    justify-content: space-between; /* Pushes buttons to opposite sides */
+    justify-content: space-between;
     align-items: center;
-    gap: 1rem;                      /* Spacing between buttons if they wrap */
-    margin: 3rem 0;                 /* Vertical spacing from content */
-    flex-wrap: wrap;                /* Allows buttons to stack on mobile */
+    gap: 1rem;
+    margin: 3rem 0;
+    flex-wrap: wrap;
     width: 100%;
 }
 
 .local-lesson-nav a, .solution_link_show {
-    display: inline-block;          /* Ensures padding and height are respected */
+    display: inline-block;
     background: var(--primary);
     color: var(--btn-text) !important;
     text-decoration: none;
@@ -179,17 +183,16 @@ code {
     letter-spacing: 0.5px;
     transition: transform 0.1s, filter 0.2s;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    white-space: nowrap;            /* Prevents text from breaking inside button */
+    white-space: nowrap;
 }
 
-/* Mobile Tweak: Center buttons when they stack */
 @media (max-width: 600px) {
     .local-lesson-nav {
         justify-content: center;
     }
     
     .local-lesson-nav a {
-        flex: 1 1 auto;             /* Buttons grow to fill width on mobile */
+        flex: 1 1 auto;
         text-align: center;
     }
 }
@@ -201,7 +204,7 @@ code {
 
 .theme-toggle {
     position: fixed;
-    bottom: 30px; /* Moved to bottom-right for better thumb reach on mobile */
+    bottom: 30px;
     right: 30px;
     width: 56px;
     height: 56px;
@@ -217,7 +220,7 @@ code {
 
 /* --- Code Styling & C++ Highlighting --- */
 pre {
-    background: #0d1117; /* GitHub-style dark */
+    background: #0d1117;
     color: #e6edf3;
     padding: 20px;
     border-radius: 8px;
@@ -259,4 +262,112 @@ code:not(pre code) {
     border-radius: 4px;
     color: var(--code-inline-text);
     font-size: 0.9em;
+}
+
+/* --- Dynamic Content Container --- */
+.entry-content {
+    background: var(--surface);
+    max-width: 1100px; 
+    width: 95%; 
+    padding: clamp(1rem, 5vw, 2.5rem);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    box-sizing: border-box;
+}
+
+.entry-content img {
+    max-width: 100%; 
+    height: auto; 
+    
+    display: block; 
+    margin: 1.5rem auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+figure {
+    margin: 0;
+    max-width: 100%;
+}
+
+figcaption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+code a {
+    color: inherit !important;
+    text-decoration: underline;
+}
+
+/* Layout Wrapper */
+.main-wrapper {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+/* Sticky Sidebar */
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--surface);
+    border-right: 1px solid var(--divider);
+    box-sizing: border-box;
+}
+
+.sidebar h3 {
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 8px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    display: block;
+    padding: 5px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover {
+    background: rgba(25, 118, 210, 0.08);
+    color: var(--primary);
+}
+
+.sidebar a.active {
+    background: var(--primary);
+    color: white !important;
+    font-weight: 500;
+}
+
+/* Adjust Content Container */
+.content-container {
+    flex: 1;
+    padding: 20px;
+    min-width: 0;
+}
+
+/* Responsive: Hide sidebar on small screens */
+@media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main-wrapper { display: block; }
 }

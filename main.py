@@ -7,7 +7,7 @@ from urllib.parse import urljoin, urlparse, urlunparse, quote_plus
 # --- Configuration ---
 START_URL = "https://www.learncpp.com/cpp-tutorial/introduction-to-these-tutorials/"
 BASE_URL = "https://www.learncpp.com"
-MAX_LESSONS = 5
+MAX_LESSONS = 10
 STOP_TITLE = "C.1 — The end?"
 OUTPUT_FOLDER = "content"
 IMG_FOLDER = os.path.join(OUTPUT_FOLDER, "img")
@@ -111,9 +111,38 @@ def scrape_lesson(url):
         print(f"Error scraping {url}: {e}")
         return None, None
 
-def wrap_and_nav(lesson, idx, total):
-    prev_link = f'<a href="lesson_{idx - 1}.html">← Previous</a>' if idx > 0 else "<span></span>"
-    next_link = f'<a href="lesson_{idx + 1}.html">Next →</a>' if idx < total - 1 else "<span></span>"
+
+def wrap_and_nav(lesson, idx, total, all_lessons):
+    """Wraps body in Material UI structure with a sticky sidebar."""
+
+    # 1. Build the Sidebar HTML
+    sidebar_items = []
+    for i, l in enumerate(all_lessons):
+        active_class = 'class="active"' if i == idx else ""
+        sidebar_items.append(
+            f'<li><a href="{l["filename"]}" {active_class}>{l["title"]}</a></li>'
+        )
+
+    sidebar_html = f"""
+    <div class="sidebar">
+        <h3>Lessons</h3>
+        <ul>
+            <li><a href="index.html">🏠 Home / Index</a></li>
+            {"".join(sidebar_items)}
+        </ul>
+    </div>
+    """
+
+    prev_link = (
+        f'<a href="lesson_{idx - 1}.html">← Previous</a>'
+        if idx > 0
+        else "<span></span>"
+    )
+    next_link = (
+        f'<a href="lesson_{idx + 1}.html">Next →</a>'
+        if idx < total - 1
+        else "<span></span>"
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -121,7 +150,7 @@ def wrap_and_nav(lesson, idx, total):
     <meta charset="UTF-8">
     <title>{lesson["title"]}</title>
     <link rel="stylesheet" href="{CSS_FILENAME}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="prism.css" rel="stylesheet" />
     <script>
         (function() {{
             const savedTheme = localStorage.getItem('theme') || 'light';
@@ -141,14 +170,20 @@ def wrap_and_nav(lesson, idx, total):
 </head>
 <body>
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓</button>
-    <div class="entry-content">
-        <h1>{lesson["title"]}</h1>
-        {lesson["body"]}
-        <div class="local-lesson-nav">{prev_link}<a href="index.html">📚 Index</a>{next_link}</div>
+    
+    <div class="main-wrapper">
+        {sidebar_html}
+        
+        <div class="content-container">
+            <div class="entry-content">
+                <h1>{lesson["title"]}</h1>
+                {lesson["body"]}
+                <div class="local-lesson-nav">{prev_link}<a href="index.html">📚 Index</a>{next_link}</div>
+            </div>
+        </div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="prism.js"></script>
 </body>
 </html>"""
 
@@ -189,10 +224,10 @@ def run_scraper():
         for a_tag in soup.find_all("a", href=True):
             href = a_tag["href"]
 
-            #Adding Prism.js functionality
+            # Adding Prism.js functionality
             for pre in soup.find_all("pre"):
                 code_content = pre.get_text()
-                pre.string = "" # Clear pre
+                pre.string = ""  # Clear pre
                 new_code_tag = soup.new_tag("code", attrs={"class": "language-cpp"})
                 new_code_tag.string = code_content
                 pre.append(new_code_tag)
@@ -226,11 +261,16 @@ def run_scraper():
         with open(
             os.path.join(OUTPUT_FOLDER, lesson["filename"]), "w", encoding="utf-8"
         ) as f:
-            f.write(wrap_and_nav(lesson, i, len(all_lessons)))
+            f.write(wrap_and_nav(lesson, i, len(all_lessons), all_lessons))
 
     # --- PHASE 3: Generate Index ---
     with open(os.path.join(OUTPUT_FOLDER, "index.html"), "w", encoding="utf-8") as f:
-        list_items = "".join([f'<li><a href="{l["filename"]}">{l["title"]}</a></li>' for l in all_lessons])
+        list_items = "".join(
+            [
+                f'<li><a href="{l["filename"]}">{l["title"]}</a></li>'
+                for l in all_lessons
+            ]
+        )
         f.write(f"""
         <html>
         <head>
